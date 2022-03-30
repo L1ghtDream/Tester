@@ -19,21 +19,21 @@ public class Test<R> {
     }
 
     @SuppressWarnings("unused")
-    public Test(int id, LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput) {
+    public Test(R desiredOutput, int id, LambdaExecutor.NoArgLambdaExecutor<R> test) {
         this.id = id;
         this.test = test;
         this.desiredOutput = desiredOutput;
     }
 
     @SuppressWarnings("unused")
-    public Test(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
+    public Test(R desiredOutput, LambdaExecutor.NoArgLambdaExecutor<R> test, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
         this.test = test;
         this.desiredOutput = desiredOutput;
         this.testCleanup = testCleanup;
     }
 
     @SuppressWarnings("unused")
-    public Test(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput) {
+    public Test(R desiredOutput, LambdaExecutor.NoArgLambdaExecutor<R> test) {
         this.test = test;
         this.desiredOutput = desiredOutput;
     }
