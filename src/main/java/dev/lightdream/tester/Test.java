@@ -5,9 +5,18 @@ import dev.lightdream.logger.Logger;
 
 public class Test<R> {
 
+    private final LambdaExecutor.NoArgLambdaExecutor<R> test;
     public int id = -1;
     public R desiredOutput;
-    LambdaExecutor.NoArgLambdaExecutor<R> test;
+    private LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup = null;
+
+    @SuppressWarnings("unused")
+    public Test(int id, LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
+        this.id = id;
+        this.test = test;
+        this.desiredOutput = desiredOutput;
+        this.testCleanup = testCleanup;
+    }
 
     @SuppressWarnings("unused")
     public Test(int id, LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput) {
@@ -17,27 +26,37 @@ public class Test<R> {
     }
 
     @SuppressWarnings("unused")
+    public Test(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
+        this.test = test;
+        this.desiredOutput = desiredOutput;
+        this.testCleanup = testCleanup;
+    }
+
+    @SuppressWarnings("unused")
     public Test(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput) {
         this.test = test;
         this.desiredOutput = desiredOutput;
     }
 
     public void run() {
-
         R output = test.execute();
         if (!output.equals(desiredOutput)) {
             if (id != -1) {
                 Logger.log("Test " + id + " failed. Expected: " + desiredOutput + " but got: " + output);
-                return;
+            } else {
+                Logger.error("Test failed: " + output + " != " + desiredOutput);
             }
-            Logger.error("Test failed: " + output + " != " + desiredOutput);
-            return;
+        } else {
+            if (id != -1) {
+                Logger.log("Test " + id + " passed.");
+            } else {
+                Logger.log("Test passed.");
+            }
         }
-        if (id != -1) {
-            Logger.log("Test " + id + " passed.");
-            return;
+
+        if (testCleanup != null) {
+            testCleanup.execute();
         }
-        Logger.log("Test passed.");
     }
 
 }
