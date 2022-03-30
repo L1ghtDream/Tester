@@ -55,11 +55,11 @@ public class TesterManager {
         registerTest(test);
     }
 
-    public static <R> void createAndRegister(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
+    public static <R> void createAndRegister(R desiredOutput, LambdaExecutor.NoArgLambdaExecutor<R> test, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
         createAndRegister(new Test<>(desiredOutput, test, testCleanup));
     }
 
-    public static <R> void createAndRegister(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput) {
+    public static <R> void createAndRegister(R desiredOutput, LambdaExecutor.NoArgLambdaExecutor<R> test) {
         createAndRegister(new Test<>(desiredOutput, test));
     }
 
