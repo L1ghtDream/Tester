@@ -8,7 +8,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class TesterManager {
 
-    private static TesterManager instance;
+    public static TesterManager instance;
     public List<Test<?>> tests = new ArrayList<>();
 
     public TesterManager() {
@@ -22,11 +22,15 @@ public class TesterManager {
         new TesterManager();
     }
 
-    public void registerTest(Test<?> test) {
-        tests.add(test);
+    public static void registerTest(Test<?> test) {
+        instance.tests.add(test);
     }
 
-    public void testAll(TestableApplication app) {
+    public static void testAll(TestableApplication app) {
+        testAll(app, true);
+    }
+
+    public static void testAll(TestableApplication app, boolean clear) {
         if (!app.test()) {
             Logger.setting("Tests are disabled");
             return;
@@ -34,9 +38,14 @@ public class TesterManager {
 
         Logger.setting("Tests are enabled. The test suite will start running immediately");
 
-        for (Test<?> test : tests) {
+        for (Test<?> test : instance.tests) {
             test.run();
         }
+
+        if (clear) {
+            instance.tests = new ArrayList<>();
+        }
     }
+
 
 }
