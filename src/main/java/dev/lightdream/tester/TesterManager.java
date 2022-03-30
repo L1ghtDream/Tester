@@ -1,5 +1,6 @@
 package dev.lightdream.tester;
 
+import dev.lightdream.lambda.LambdaExecutor;
 import dev.lightdream.logger.Logger;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 public class TesterManager {
 
     public static TesterManager instance;
+    public int id = 0;
     public List<Test<?>> tests = new ArrayList<>();
 
     public TesterManager() {
@@ -45,6 +47,20 @@ public class TesterManager {
         if (clear) {
             instance.tests = new ArrayList<>();
         }
+    }
+
+    public static void createAndRegister(Test<?> test) {
+        instance.id++;
+        test.setID(instance.id);
+        registerTest(test);
+    }
+
+    public static <R> void createAndRegister(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput, LambdaExecutor.NoReturnNoArgLambdaExecutor testCleanup) {
+        createAndRegister(new Test<>(test, desiredOutput, testCleanup));
+    }
+
+    public static <R> void createAndRegister(LambdaExecutor.NoArgLambdaExecutor<R> test, R desiredOutput) {
+        createAndRegister(new Test<>(test, desiredOutput));
     }
 
 

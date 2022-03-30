@@ -59,4 +59,8 @@ public class Test<R> {
         }
     }
 
+    public void setID(int id) {
+        this.id = id;
+    }
+
 }
