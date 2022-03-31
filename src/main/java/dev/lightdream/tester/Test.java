@@ -39,8 +39,18 @@ public class Test<R> {
     }
 
     public void run() {
-        R output = test.execute();
-        if (!output.equals(desiredOutput)) {
+
+        R output  = LambdaExecutor.LambdaCatch.ReturnLambdaCatch.executeCatch(test::execute, e -> {
+            Logger.error("Test " + id + " failed with exception: " + e.getMessage());
+            return null;
+        });
+
+        boolean check = output == null && desiredOutput == null;
+        if (!check && output != null) {
+            check = output.equals(desiredOutput);
+        }
+
+        if (!check) {
             if (id != -1) {
                 Logger.log("Test " + id + " failed. Expected: " + desiredOutput + " but got: " + output);
             } else {
