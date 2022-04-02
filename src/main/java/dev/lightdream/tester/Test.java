@@ -3,6 +3,8 @@ package dev.lightdream.tester;
 import dev.lightdream.lambda.LambdaExecutor;
 import dev.lightdream.logger.Logger;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class Test<R> {
 
     private final LambdaExecutor.NoArgLambdaExecutor<R> test;
@@ -40,10 +42,15 @@ public class Test<R> {
 
     public void run() {
 
-        R output  = LambdaExecutor.LambdaCatch.ReturnLambdaCatch.executeCatch(test::execute, e -> {
+        AtomicBoolean error = new AtomicBoolean(false);
+
+        R output = LambdaExecutor.LambdaCatch.ReturnLambdaCatch.executeCatch(test::execute, e -> {
             Logger.error("Test " + id + " failed with exception: " + e.getMessage());
+            error.set(true);
             return null;
         });
+
+        if (error.get()) return;
 
         boolean check = output == null && desiredOutput == null;
         if (!check && output != null) {
