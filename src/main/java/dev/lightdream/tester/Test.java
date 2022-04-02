@@ -65,9 +65,9 @@ public class Test<R> {
             }
         } else {
             if (id != -1) {
-                Logger.log("Test " + id + " passed.");
+                Logger.good("Test " + id + " passed.");
             } else {
-                Logger.log("Test passed.");
+                Logger.good("Test passed.");
             }
         }
 
